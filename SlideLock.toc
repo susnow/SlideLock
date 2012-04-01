@@ -1,0 +1,10 @@
+﻿## Interface: 40300
+## Author: susnow@NGA
+## Title: SlideLock
+## Title-zhCN: iOS锁屏
+## Title-zhTW: iOS鎖屏
+## Notes: lock screen with iOS layout :)
+## Notes-zhCN: 和iOS风格类似的锁屏插件
+## Notes-zhTW: 和iOS風格類似的鎖屏插件
+
+SlideLock.lua
