@@ -42,6 +42,13 @@ SL.SlideBar:SetPoint("BOTTOM",SL,0,20)
 SL.SlideBar.tex = SL.SlideBar:CreateTexture(nil,"ARTWORK") 
 SL.SlideBar.tex:SetTexture(barTex)
 SL.SlideBar.tex:SetAllPoints(SL.SlideBar)
+SL.CameraButton = CreateFrame("Button",nil,SL)
+SL.CameraButton:SetSize(32,32)
+SL.CameraButton:SetPoint("LEFT",SL.SlideBar,"RIGHT",-16,1)
+SL.CameraButton.tex = SL.CameraButton:CreateTexture(nil,"OVERLAY")
+SL.CameraButton.tex:SetTexture(tex.."Camera3")
+SL.CameraButton.tex:SetPoint("CENTER",SL.CameraButton)
+SL.CameraButton:SetScale(0.94)
 SL.SlideButton = CreateFrame("Button",nil,SL)
 SL.SlideButton:SetScale(0.94)
 SL.SlideButton:SetFrameLevel(SL.SlideBar:GetFrameLevel()+10)
@@ -173,6 +180,14 @@ SL.SlideButton:SetScript("OnMouseUp",function(self)
 			end
 		end)
 	end
+end)
+
+SL.CameraButton:RegisterEvent("SCREENSHOT_SUCCEEDED")
+SL.CameraButton:SetScript("OnClick",function(self)
+	Screenshot()
+	self:SetScript("OnEvent",function()
+		PlaySoundFile(tex.."Camera.ogg","Master")
+	end)
 end)
 
 -- don't Unregister this handler , because I need to intercept all keyboard action
