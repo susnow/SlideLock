@@ -7,4 +7,6 @@
 ## Notes-zhCN: 和iOS风格类似的锁屏插件
 ## Notes-zhTW: 和iOS風格類似的鎖屏插件
 
+
+config.lua
 SlideLock.lua

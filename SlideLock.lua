@@ -1,6 +1,7 @@
 ﻿--Susnow
 
 local addon,ns = ...
+local cfg = ns.cfg
 local texFile = "Interface\\Buttons\\WHITE8X8"
 local bgTex = {bgFile = texFile,edgeFile = texFile, edgeSize = 1,insets={top = 0, bottom = 0,left = 0,right = 0}}
 local tex = "Interface\\AddOns\\SlideLock\\media\\"
@@ -208,6 +209,7 @@ local function ToggleSlideLock(flag)
 		BP1:Show()
 		BP2:Show()
 		TP:Show()
+		PlaySoundFile(tex.."lock2.ogg","Master")
 	end
 end
 
@@ -215,9 +217,24 @@ ToggleSlideLock("HIDE")
 
 UIParent:HookScript("OnHide",function()
 	ToggleSlideLock("SHOW")
-	PlaySoundFile(tex.."lock2.ogg","Master")
 end)
 
 UIParent:HookScript("OnShow",function()
 	ToggleSlideLock("HIDE")
 end)
+
+
+local UIP = CreateFrame("Frame")
+if cfg.AFK then
+	UIP:RegisterEvent("PLAYER_FLAGS_CHANGED")
+	UIP:SetScript("OnEvent",function()
+		if UnitIsAFK("player") then
+			UIParent:Hide()
+		else
+			return 
+		end
+	end)
+else
+	return
+end
+
