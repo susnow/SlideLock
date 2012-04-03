@@ -24,6 +24,10 @@ local function CreateFontObject(fontObject,parent,layer,color)
 	end
 end
 
+local month = {"January","February","March","April","May","June","July","Auguest","September","October","November","December"}
+local week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}
+
+
 local SL = CreateFrame("Frame","SlideLock",WorldFrame)
 SL:SetAllPoints(UIParent)
 SL.nextUpdate = 0
@@ -93,9 +97,18 @@ TP.time = TP:CreateFontString(nil,"OVERLAY","ChatFontNormal")
 TP.time:SetPoint("CENTER",TP)
 do 
 	local font,size,flag = TP.time:GetFont()
-	TP.time:SetFont(font,48,"OUTLINE")
+	TP.time:SetFont(font,480,"OUTLINE")
 end
 TP.time:SetText(format("%s:%s:%s",date("%H"),date("%M"),date("%S")))
+TP.YMDW = TP:CreateFontString(nil,"OVERLAY","ChatFontNormal")
+do 
+	local font,size,flag = TP.YMDW:GetFont()
+	TP.YMDW:SetFont(font,10,"NORMAL")
+end
+TP.YMDW:SetPoint("TOP",TP.time,"BOTTOM",0,-10)
+local w,m,d,y = CalendarGetDate()
+TP.YMDW:SetText(format("%s, %s %s",week[w],month[m],d))
+
 
 SL:SetScript("OnUpdate",function(self,elapsed)
 	self.nextUpdate = self.nextUpdate + elapsed
@@ -117,6 +130,9 @@ SL:SetScript("OnUpdate",function(self,elapsed)
 end)
 
 SL.SlideButton:SetScript("OnMouseDown",function()
+	SL.TextBG:SetAlpha(0)
+	SL.TextStuff:SetAlpha(0)
+	SL.TextCover:SetAlpha(0)
 	local mdmX = GetCursorPosition()  -- mouse's x positon when MouseDown action,every mousedown just get once
 	local mdsX = select(4,SL.SlideButton:GetPoint()) -- slider's x positon when MouseDown action, every mousedown just get once
 	SL.control:SetScript("OnUpdate",function(self,elapsed)
@@ -143,6 +159,9 @@ SL.SlideButton:SetScript("OnMouseDown",function()
 end)
 
 SL.SlideButton:SetScript("OnMouseUp",function(self)
+	SL.TextBG:SetAlpha(1)
+	SL.TextStuff:SetAlpha(1)
+	SL.TextCover:SetAlpha(1)
 	SL.control:SetScript("OnUpdate",nil)
 	local musX = select(4,SL.SlideButton:GetPoint())
 	if musX >= 55 then
