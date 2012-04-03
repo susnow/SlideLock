@@ -97,7 +97,7 @@ TP.time = TP:CreateFontString(nil,"OVERLAY","ChatFontNormal")
 TP.time:SetPoint("CENTER",TP)
 do 
 	local font,size,flag = TP.time:GetFont()
-	TP.time:SetFont(font,480,"OUTLINE")
+	TP.time:SetFont(font,48,"OUTLINE")
 end
 TP.time:SetText(format("%s:%s:%s",date("%H"),date("%M"),date("%S")))
 TP.YMDW = TP:CreateFontString(nil,"OVERLAY","ChatFontNormal")
@@ -130,9 +130,9 @@ SL:SetScript("OnUpdate",function(self,elapsed)
 end)
 
 SL.SlideButton:SetScript("OnMouseDown",function()
-	SL.TextBG:SetAlpha(0)
-	SL.TextStuff:SetAlpha(0)
-	SL.TextCover:SetAlpha(0)
+--	SL.TextBG:SetAlpha(0)
+--	SL.TextStuff:SetAlpha(0)
+--	SL.TextCover:SetAlpha(0)
 	local mdmX = GetCursorPosition()  -- mouse's x positon when MouseDown action,every mousedown just get once
 	local mdsX = select(4,SL.SlideButton:GetPoint()) -- slider's x positon when MouseDown action, every mousedown just get once
 	SL.control:SetScript("OnUpdate",function(self,elapsed)
@@ -159,9 +159,9 @@ SL.SlideButton:SetScript("OnMouseDown",function()
 end)
 
 SL.SlideButton:SetScript("OnMouseUp",function(self)
-	SL.TextBG:SetAlpha(1)
-	SL.TextStuff:SetAlpha(1)
-	SL.TextCover:SetAlpha(1)
+--	SL.TextBG:SetAlpha(1)
+--	SL.TextStuff:SetAlpha(1)
+--	SL.TextCover:SetAlpha(1)
 	SL.control:SetScript("OnUpdate",nil)
 	local musX = select(4,SL.SlideButton:GetPoint())
 	if musX >= 55 then
@@ -232,7 +232,6 @@ local function ToggleSlideLock(flag)
 	end
 end
 
-ToggleSlideLock("HIDE")
 
 UIParent:HookScript("OnHide",function()
 	ToggleSlideLock("SHOW")
@@ -242,6 +241,7 @@ UIParent:HookScript("OnShow",function()
 	ToggleSlideLock("HIDE")
 end)
 
+ToggleSlideLock("HIDE")
 
 local UIP = CreateFrame("Frame")
 if cfg.AFK then
