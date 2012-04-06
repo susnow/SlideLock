@@ -1,12 +1,12 @@
 ﻿--Susnow
 
 local addon,ns = ...
-local cfg = ns.cfg
 local texFile = "Interface\\Buttons\\WHITE8X8"
 local bgTex = {bgFile = texFile,edgeFile = texFile, edgeSize = 1,insets={top = 0, bottom = 0,left = 0,right = 0}}
 local tex = "Interface\\AddOns\\SlideLock\\media\\"
-local barTex = tex.."bar2"
-local buttonTex = tex.."button2"
+
+local month = {"January","February","March","April","May","June","July","Auguest","September","October","November","December"}local week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Sturday"}
+
 
 local function CreateFontObject(fontObject,parent,layer,color)
 	parent[fontObject] = parent.SlideBar:CreateFontString(layer,nil,"ChatFontNormal")
@@ -30,18 +30,14 @@ SL.nextUpdate = 0
 SL.gradient = 0 
 SL:EnableMouse(true)
 SL:EnableKeyboard(true)
-
-
---SL:SetBackdrop(bgTex)
---SL:SetBackdropColor(.3,.3,.3,.8)
---SL:SetBackdropBorderColor(0,0,0,0)
+SL:EnableMouseWheel(true)
 
 SL.SlideBar = CreateFrame("Frame","SlideBar",SL)-- :CreateTexture(nil,"ARTWORK")
 SL.SlideBar.nextUpdate = 0
 SL.SlideBar:SetSize(256,32)
 SL.SlideBar:SetPoint("BOTTOM",SL,0,20)
 SL.SlideBar.tex = SL.SlideBar:CreateTexture(nil,"ARTWORK") 
-SL.SlideBar.tex:SetTexture(barTex)
+SL.SlideBar.tex:SetTexture(tex.."bar2")
 SL.SlideBar.tex:SetAllPoints(SL.SlideBar)
 SL.CameraButton = CreateFrame("Button",nil,SL)
 SL.CameraButton:SetSize(32,32)
@@ -57,7 +53,7 @@ SL.SlideButton.nextUpdate = 0
 SL.SlideButton:SetSize(64,32)
 SL.SlideButton:SetPoint("LEFT",SL.SlideBar,14,-0.3)
 SL.SlideButton.tex = SL.SlideButton:CreateTexture(nil,"OVERLAY")
-SL.SlideButton.tex:SetTexture(buttonTex)
+SL.SlideButton.tex:SetTexture(tex.."button2")
 SL.SlideButton.tex:SetPoint("CENTER",SL.SlideButton)
 SL.SlideButton:EnableKeyboard(true)
 SL.control = CreateFrame("Frame")
@@ -96,6 +92,17 @@ do
 	TP.time:SetFont(font,48,"OUTLINE")
 end
 TP.time:SetText(format("%s:%s:%s",date("%H"),date("%M"),date("%S")))
+TP.YMDW = TP:CreateFontString(nil,"OVERLAY","ChatFontNormal")
+do 
+	local font,size,flag = TP.YMDW:GetFont()
+	TP.YMDW:SetFont(font,10,"NORMAL")
+end
+TP.YMDW:SetPoint("TOP",TP.time,"BOTTOM",0,-10)
+TP:RegisterEvent("PLAYER_LOGIN")
+TP:SetScript("OnEvent",function(self)
+	local w,m,d,y = CalendarGetDate()
+	TP.YMDW:SetText(format("%s,%s%s",week[w],month[m],d))
+end)
 
 SL:SetScript("OnUpdate",function(self,elapsed)
 	self.nextUpdate = self.nextUpdate + elapsed
@@ -156,10 +163,8 @@ SL.SlideButton:SetScript("OnMouseUp",function(self)
 					self:SetPoint("LEFT",SL.SlideBar,tempX,-0.3)
 				else
 					self:SetScript("OnUpdate",nil)
-					PlaySoundFile(tex.."Unlock2.ogg","Master")
 					self:SetPoint("LEFT",SL.SlideBar,194,-0.3)
-					UIParent:Show()
-					SetUIVisibility(true)
+					SL:ToggleSlideLock("HIDE")
 				end
 			self.nextUpdate = 0
 			end
@@ -195,15 +200,21 @@ end)
 SL:SetScript("OnKeyDown",function(self,key)
 	--
 end)
+SL:SetScript("OnMouseWheel",function()
+	--
+end)
 
-local function ToggleSlideLock(flag)
+function SL:ToggleSlideLock(flag)
 	if flag == "HIDE" then
 		SL:Hide()
 		BP1:Hide()
 		BP2:Hide()
 		TP:Hide()
+		PlaySoundFile(tex.."Unlock2.ogg","Master")
+		UIParent:Show()
 		SetUIVisibility(true)
 	elseif flag == "SHOW" then
+		UIParent:Hide()
 		SL:Show()
 		SL.SlideButton:SetPoint("LEFT",SL.SlideBar,13.5, -0.3)
 		BP1:Show()
@@ -213,28 +224,5 @@ local function ToggleSlideLock(flag)
 	end
 end
 
-ToggleSlideLock("HIDE")
-
-UIParent:HookScript("OnHide",function()
-	ToggleSlideLock("SHOW")
-end)
-
-UIParent:HookScript("OnShow",function()
-	ToggleSlideLock("HIDE")
-end)
-
-
-local UIP = CreateFrame("Frame")
-if cfg.AFK then
-	UIP:RegisterEvent("PLAYER_FLAGS_CHANGED")
-	UIP:SetScript("OnEvent",function()
-		if UnitIsAFK("player") then
-			UIParent:Hide()
-		else
-			return 
-		end
-	end)
-else
-	return
-end
+SL:ToggleSlideLock("HIDE")
 
