@@ -24,6 +24,10 @@ local function CreateFontObject(fontObject,parent,layer,color)
 	end
 end
 
+local month = {"January","February","March","April","May","June","July","Auguest","September","October","November","December"}
+local week = {"Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"}
+
+
 local SL = CreateFrame("Frame","SlideLock",WorldFrame)
 SL:SetAllPoints(UIParent)
 SL.nextUpdate = 0
@@ -124,6 +128,9 @@ SL:SetScript("OnUpdate",function(self,elapsed)
 end)
 
 SL.SlideButton:SetScript("OnMouseDown",function()
+	SL.TextBG:SetAlpha(0)
+	SL.TextStuff:SetAlpha(0)
+	SL.TextCover:SetAlpha(0)
 	local mdmX = GetCursorPosition()  -- mouse's x positon when MouseDown action,every mousedown just get once
 	local mdsX = select(4,SL.SlideButton:GetPoint()) -- slider's x positon when MouseDown action, every mousedown just get once
 	SL.control:SetScript("OnUpdate",function(self,elapsed)
@@ -150,6 +157,9 @@ SL.SlideButton:SetScript("OnMouseDown",function()
 end)
 
 SL.SlideButton:SetScript("OnMouseUp",function(self)
+	SL.TextBG:SetAlpha(1)
+	SL.TextStuff:SetAlpha(1)
+	SL.TextCover:SetAlpha(1)
 	SL.control:SetScript("OnUpdate",nil)
 	local musX = select(4,SL.SlideButton:GetPoint())
 	if musX >= 55 then
